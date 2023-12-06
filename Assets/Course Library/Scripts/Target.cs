@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Target : MonoBehaviour
 {
@@ -50,13 +51,25 @@ public class Target : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(gameManager.gameActive)
+        {
         Destroy(gameObject);
         gameManager.UpdateScore(pointValue);
         Instantiate(expParticle, transform.position, expParticle.transform.rotation);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        if(!gameObject.CompareTag("Hazard"))
+        {
+            gameManager.GameOver();
+        }
+    }
+    
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
